@@ -14,6 +14,12 @@ library(janitor)
 library(stringr)
 library(openxlsx)
 options(shiny.maxRequestSize = 10 * 1024^2)
+# Workaround for Chromium Issue 468227
+downloadButton <- function(...) {
+   tag <- shiny::downloadButton(...)
+   tag$attribs$download <- NULL
+   tag
+}
 ui <-  page_navbar(
    title = "Breast Cancer Data Cleaning",
    id = 'nav',
