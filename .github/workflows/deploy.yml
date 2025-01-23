@@ -9,7 +9,7 @@ name: data-cleaning-r-shinylive-app
 
 jobs:
     demo-website:
-      runs-on: ubuntu-latest
+      runs-on: ubuntu22.04
       # Only restrict concurrency for non-PR jobs
       concurrency:
         group: r-shinylive-website-${{ github.event_name != 'pull_request' || github.run_id }}
