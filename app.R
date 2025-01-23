@@ -12,6 +12,7 @@ library(dplyr)
 library(shinyjs)
 library(janitor)
 library(stringr)
+library(openxlsx)
 options(shiny.maxRequestSize = 10 * 1024^2)
 ui <-  page_navbar(
    title = "Breast Cancer Data Cleaning",
@@ -212,13 +213,17 @@ server <- function(input,output,session){
     
     # Download -------------------------------------------------------
     output$download <- downloadHandler(
-       filename = function() {
-          paste0(tools::file_path_sans_ext(input$file$name), ".xlsx")
-       },
-       content = function(file) {
-          write_xlsx(joined_data(), file)
-       }
-    )
+          filename = function() {
+             paste0("data-", Sys.Date(), ".xlsx")
+          },
+          content = function(file) {
+             wb <- createWorkbook()
+             addWorksheet(wb, "Sheet1")
+             writeData(wb, "Sheet1", joined_data())
+             saveWorkbook(wb, file, overwrite = TRUE)
+          },
+          contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+       )
 }
 # Run the application 
 shinyApp(ui = ui, server = server)
